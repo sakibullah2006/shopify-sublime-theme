@@ -1,0 +1,79 @@
+<header class="sticky top-0 z-50 bg-white border-b border-gray-100">
+  <div class="h-16 px-4 md:px-6 lg:px-8 flex items-center justify-between max-w-full">
+    {%- # Logo -%}
+    <div class="flex-shrink-0">
+      <a
+        href="{{ routes.root_url }}"
+        class="text-lg font-semibold tracking-tight text-gray-900 hover:text-gray-600 transition-colors duration-200"
+      >
+        {{ shop.name }}
+      </a>
+    </div>
+
+    {%- # Navigation Menu (Desktop) -%}
+    <nav class="flex items-start gap-6 md:gap-8">
+      {%- for link in section.settings.menu.links -%}
+        <a
+          href="{{ link.url }}"
+          class="text-sm text-gray-700 font-normal  hover:text-gray-900 transition-colors duration-200 relative group whitespace-nowrap"
+        >
+          {{ link.title }}
+          <span
+            class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"
+          ></span>
+        </a>
+      {%- endfor -%}
+    </nav>
+
+    {%- # Actions (Account & Cart) -%}
+    <div class="flex items-center gap-4 ml-auto">
+      {%- if shop.customer_accounts_enabled -%}
+        <a
+          href="{{ routes.account_url }}"
+          class="text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2"
+          aria-label="Account"
+        >
+          {%- if customer -%}
+            {%- # Show customer avatar when logged in -%}
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+              {{ customer | avatar: size: 32 }}
+            </div>
+          {%- else -%}
+            {%- # Show account icon when not logged in -%}
+            <div class="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_path]:stroke-current">
+              {{ 'icon-account.svg' | inline_asset_content }}
+            </div>
+          {%- endif -%}
+        </a>
+      {%- endif -%}
+
+      <a
+        href="{{ routes.cart_url }}"
+        class="relative text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2 group"
+        aria-label="Cart"
+      >
+        <div class="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_path]:stroke-current">
+          {{ 'icon-cart.svg' | inline_asset_content }}
+        </div>
+        {%- if cart.item_count > 0 -%}
+          <span class="absolute top-0 right-0 -mt-1 -mr-1 flex items-center justify-center w-5 h-5 bg-gray-900 text-white text-xs font-semibold rounded-full">
+            {{ cart.item_count }}
+          </span>
+        {%- endif -%}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "t:general.header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    }
+  ]
+}
+{% endschema %}

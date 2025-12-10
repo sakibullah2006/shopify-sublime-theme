@@ -5,53 +5,44 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
 {% endcomment %}
 
-<h1>{{ 'collections.title' | t }}</h1>
+<div class="py-8 px-4 md:px-8">
+  <h1 class="text-3xl font-bold mb-8">{{ 'collections.title' | t }}</h1>
 
-<div
-  class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
->
-  {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
-      {% if collection.featured_image %}
-        {% render 'image',
-          class: 'collection-card__image',
-          image: collection.featured_image,
-          width: 600,
-          height: 600,
-          crop: 'center'
-        %}
-      {% endif %}
+  {% liquid
+    if section.settings.grid_item_width == 'collections--compact'
+      assign grid_classes = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6'
+    else
+      assign grid_classes = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+    endif
+  %}
 
-      <div class="collection-card__content">
-        <p>{{ collection.title }}</p>
-
-        {% if collection.description %}
-          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
+  <div
+    class="{{ grid_classes }}"
+    style="gap: {{ section.settings.grid_gap }}px"
+  >
+    {% for collection in collections %}
+      <a class="group flex flex-col" href="{{ collection.url }}">
+        {% if collection.featured_image %}
+          <div class="overflow-hidden rounded-lg mb-3">
+            {{
+              collection.featured_image
+              | image_url: width: 600, height: 600, crop: 'center'
+              | image_tag: class: 'w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105'
+            }}
+          </div>
         {% endif %}
-      </div>
-    </a>
-  {% endfor %}
-</div>
 
-{% stylesheet %}
-  .collections {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap);
-  }
-  .collections--compact {
-    --collection-card-size: 160px;
-  }
-  .collections--full {
-    --collection-card-size: 280px;
-  }
-  .collection-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-{% endstylesheet %}
+        <div class="space-y-1">
+          <p class="font-medium group-hover:underline">{{ collection.title }}</p>
+
+          {% if collection.description %}
+            <p class="text-sm text-neutral-600">{{ collection.description | strip_html | truncatewords: 15 }}</p>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
 
 {% schema %}
 {

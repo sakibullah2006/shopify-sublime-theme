@@ -1,7 +1,7 @@
-<header class="sticky top-0 z-50 bg-white border-b border-gray-100">
-  <div class="h-16 px-4 md:px-6 lg:px-8 flex items-center justify-between max-w-full">
+<header class="sticky top-0 z-50 w-full bg-white border-b border-gray-100">
+  <div class="h-16 px-4 md:px-6 lg:px-8 flex items-center justify-between">
     {%- # Logo -%}
-    <div class="flex-shrink-0">
+    <div class="shrink-0">
       <a
         href="{{ routes.root_url }}"
         class="text-lg font-semibold tracking-tight text-gray-900 hover:text-gray-600 transition-colors duration-200"
@@ -10,37 +10,37 @@
       </a>
     </div>
 
-    {%- # Navigation Menu (Desktop) -%}
-    <nav class="flex items-start gap-6 md:gap-8">
+    {%- # Desktop Navigation Menu -%}
+    <nav class="hidden md:flex  gap-8">
       {%- for link in section.settings.menu.links -%}
-        <a
-          href="{{ link.url }}"
-          class="text-sm text-gray-700 font-normal  hover:text-gray-900 transition-colors duration-200 relative group whitespace-nowrap"
-        >
-          {{ link.title }}
-          <span
-            class="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-900 group-hover:w-full transition-all duration-300"
-          ></span>
-        </a>
+        <div class="">
+          <a
+            href="{{ link.url }}"
+            class="text-sm text-gray-700 font-medium hover:text-gray-900 transition-colors duration-200 relative group whitespace-nowrap"
+          >
+            {{ link.title }}
+            <span
+              class="absolute -bottom-px left-0 w-0 h-px bg-gray-900 group-hover:w-full transition-all duration-300"
+            ></span>
+          </a>
+        </div>
       {%- endfor -%}
     </nav>
 
     {%- # Actions (Account & Cart) -%}
-    <div class="flex items-center gap-4 ml-auto">
+    <div class="flex items-center gap-4 ml-auto shrink-0">
       {%- if shop.customer_accounts_enabled -%}
         <a
           href="{{ routes.account_url }}"
-          class="text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2"
+          class="hidden md:flex text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2"
           aria-label="Account"
         >
           {%- if customer -%}
-            {%- # Show customer avatar when logged in -%}
-            <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center shrink-0">
               {{ customer | avatar: size: 32 }}
             </div>
           {%- else -%}
-            {%- # Show account icon when not logged in -%}
-            <div class="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_path]:stroke-current">
+            <div class="w-5 h-5 [&_svg]:w-full [&_svg]:h-full [&_path]:stroke-current shrink-0">
               {{ 'icon-account.svg' | inline_asset_content }}
             </div>
           {%- endif -%}
@@ -49,10 +49,10 @@
 
       <a
         href="{{ routes.cart_url }}"
-        class="relative text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2 group"
+        class="relative text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2"
         aria-label="Cart"
       >
-        <div class="w-7 h-7 [&_svg]:w-full [&_svg]:h-full [&_path]:stroke-current">
+        <div class="w-5 h-5 [&_svg]:w-full [&_svg]:h-full [&_path]:stroke-current">
           {{ 'icon-cart.svg' | inline_asset_content }}
         </div>
         {%- if cart.item_count > 0 -%}
@@ -61,9 +61,105 @@
           </span>
         {%- endif -%}
       </a>
+
+      {%- # Mobile Menu Button -%}
+      <button
+        type="button"
+        class="md:hidden text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2"
+        aria-label="Open menu"
+        onclick="document.getElementById('mobile-menu').classList.remove('-translate-x-full')"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </div>
   </div>
 </header>
+
+{%- # Mobile Drawer -%}
+<div
+  id="mobile-menu"
+  class="fixed inset-y-0 left-0 z-50 w-full max-w-sm bg-white shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out"
+>
+  <div class="flex flex-col h-full">
+    {%- # Drawer Header -%}
+    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <span class="text-lg font-semibold text-gray-900">Menu</span>
+      <button
+        type="button"
+        class="text-gray-700 hover:text-gray-900 transition-colors duration-200 p-2 -m-2"
+        aria-label="Close menu"
+        onclick="document.getElementById('mobile-menu').classList.add('-translate-x-full')"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    {%- # Drawer Content -%}
+    <nav class="flex-1 overflow-y-auto p-4">
+      <div class="flex flex-col gap-1">
+        {%- for link in section.settings.menu.links -%}
+          <a
+            href="{{ link.url }}"
+            class="text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors duration-200"
+          >
+            {{ link.title }}
+          </a>
+        {%- endfor -%}
+      </div>
+    </nav>
+
+    {%- # Drawer Footer -%}
+    {%- if shop.customer_accounts_enabled -%}
+      <div class="border-t border-gray-200 p-4">
+        <a
+          href="{{ routes.account_url }}"
+          class="flex items-center gap-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-4 py-3 rounded-lg transition-colors duration-200"
+        >
+          {%- if customer -%}
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center shrink-0">
+              {{ customer | avatar: size: 32 }}
+            </div>
+            <span class="text-base">{{ customer.first_name | default: 'My Account' }}</span>
+          {%- else -%}
+            <div class="w-5 h-5 [&_svg]:w-full [&_svg]:h-full [&_path]:stroke-current shrink-0">
+              {{ 'icon-account.svg' | inline_asset_content }}
+            </div>
+            <span class="text-base">Account</span>
+          {%- endif -%}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- # Backdrop Overlay -%}
+<div
+  id="mobile-menu-backdrop"
+  class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 hidden"
+  onclick="document.getElementById('mobile-menu').classList.add('-translate-x-full'); this.classList.add('hidden')"
+></div>
+
+{% javascript %}
+  // Show/hide backdrop with menu
+  const mobileMenu = document.getElementById('mobile-menu');
+  const backdrop = document.getElementById('mobile-menu-backdrop');
+
+  if (mobileMenu && backdrop) {
+    const observer = new MutationObserver(() => {
+      if (mobileMenu.classList.contains('-translate-x-full')) {
+        backdrop.classList.add('hidden');
+      } else {
+        backdrop.classList.remove('hidden');
+      }
+    });
+
+    observer.observe(mobileMenu, { attributes: true, attributeFilter: ['class'] });
+  }
+{% endjavascript %}
 
 {% schema %}
 {

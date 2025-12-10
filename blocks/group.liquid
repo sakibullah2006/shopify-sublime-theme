@@ -11,38 +11,32 @@
   {% content_for 'block', type: 'group', id: 'group' %}
 {% enddoc %}
 
+{% liquid
+  if block.settings.layout_direction == 'group--horizontal'
+    assign layout_classes = 'flex flex-row flex-nowrap justify-between items-center overflow-hidden w-full'
+    assign padding_style = 'padding-left: ' | append: block.settings.padding | append: 'px; padding-right: ' | append: block.settings.padding | append: 'px;'
+  else
+    assign layout_classes = 'flex flex-col flex-nowrap overflow-hidden w-full'
+    assign padding_style = 'padding-top: ' | append: block.settings.padding | append: 'px; padding-bottom: ' | append: block.settings.padding | append: 'px;'
+
+    case block.settings.alignment
+      when 'flex-start'
+        assign layout_classes = layout_classes | append: ' items-start'
+      when 'center'
+        assign layout_classes = layout_classes | append: ' items-center'
+      when 'flex-end'
+        assign layout_classes = layout_classes | append: ' items-end'
+    endcase
+  endif
+%}
+
 <div
-  class="group {{ block.settings.layout_direction }}"
-  style="
-    --padding: {{ block.settings.padding }}px;
-    --alignment: {{ block.settings.alignment }};
-  "
+  class="{{ layout_classes }}"
+  style="{{ padding_style }}"
   {{ block.shopify_attributes }}
 >
   {% content_for 'blocks' %}
 </div>
-
-{% stylesheet %}
-  .group {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .group--horizontal {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 var(--padding);
-  }
-
-  .group--vertical {
-    flex-direction: column;
-    align-items: var(--alignment);
-    padding: var(--padding) 0;
-  }
-{% endstylesheet %}
 
 {% schema %}
 {

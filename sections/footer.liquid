@@ -1,29 +1,29 @@
-<footer class="bg-gray-50 border-t border-gray-200">
-  <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-16">
+<footer class="full-width bg-neutral-50 border-t border-neutral-200">
+  <div class="max-w-7xl mx-auto px-6 md:px-8 lg:px-12 py-10 md:py-12">
     {%- # Main Footer Content -%}
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-8">
       {%- # Brand Section -%}
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-3">
         <a
           href="{{ routes.root_url }}"
-          class="text-lg font-semibold text-gray-900 hover:text-gray-600 transition-colors duration-200 w-fit"
+          class="text-lg font-semibold text-neutral-900 hover:text-neutral-600 transition-colors duration-200 w-fit"
         >
           {{ shop.name }}
         </a>
-        <p class="text-sm text-gray-600 leading-relaxed">
+        <p class="text-sm text-neutral-600 leading-relaxed max-w-xs">
           {{ shop.description | default: 'Your premium destination for quality products and exceptional service.' }}
         </p>
       </div>
 
       {%- # Navigation Links -%}
       {%- if section.settings.menu.links.size > 0 -%}
-        <div class="flex flex-col gap-4">
-          <h3 class="text-sm font-semibold text-gray-900">Quick Links</h3>
-          <nav class="flex flex-col gap-3">
+        <div class="flex flex-col gap-3">
+          <h3 class="text-sm font-semibold text-neutral-900">Quick Links</h3>
+          <nav class="flex flex-col gap-2">
             {%- for link in section.settings.menu.links -%}
               <a
                 href="{{ link.url }}"
-                class="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200 w-fit"
+                class="text-sm text-neutral-600 hover:text-neutral-900 transition-colors duration-200 w-fit"
               >
                 {{ link.title }}
               </a>
@@ -33,11 +33,11 @@
       {%- endif -%}
 
       {%- # Contact Section -%}
-      <div class="flex flex-col gap-4">
-        <h3 class="text-sm font-semibold text-gray-900">Customer Care</h3>
-        <div class="flex flex-col gap-2 text-sm text-gray-600">
+      <div class="flex flex-col gap-3">
+        <h3 class="text-sm font-semibold text-neutral-900">Customer Care</h3>
+        <div class="flex flex-col gap-1.5 text-sm text-neutral-600">
           <p>Need help? We're here for you.</p>
-          <a href="mailto:support@example.com" class="hover:text-gray-900 transition-colors duration-200 w-fit">
+          <a href="mailto:support@example.com" class="hover:text-neutral-900 transition-colors duration-200 w-fit">
             support@example.com
           </a>
         </div>
@@ -46,11 +46,11 @@
 
     {%- # Payment Icons Section -%}
     {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
-      <div class="border-t border-gray-200 pt-8 mb-8">
-        <h3 class="text-sm font-semibold text-gray-900 mb-4">Payment Methods</h3>
-        <div class="flex flex-wrap gap-4 items-center">
+      <div class="border-t border-neutral-200 pt-6 mb-6">
+        <h3 class="text-sm font-semibold text-neutral-900 mb-3">Payment Methods</h3>
+        <div class="flex flex-wrap gap-3 items-center">
           {%- for type in shop.enabled_payment_types -%}
-            <div class="h-8 opacity-70 hover:opacity-100 transition-opacity duration-200">
+            <div class="h-7 opacity-70 hover:opacity-100 transition-opacity duration-200">
               {{ type | payment_type_svg_tag: style: 'max-height: 100%' }}
             </div>
           {%- endfor -%}
@@ -59,7 +59,7 @@
     {%- endif -%}
 
     {%- # Footer Bottom -%}
-    <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-gray-600">
+    <div class="border-t border-neutral-200 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-neutral-500">
       <div>
         &copy; {{ 'now' | date: '%Y' }}
         {{ shop.name }}. All rights reserved.

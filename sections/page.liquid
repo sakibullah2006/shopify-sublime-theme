@@ -5,9 +5,13 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-<h1>{{ page.title }}</h1>
+<article class="py-8 px-4 md:px-8 max-w-4xl mx-auto">
+  <h1 class="text-3xl md:text-4xl font-bold mb-8">{{ page.title }}</h1>
 
-{{ page.content }}
+  <div class="prose prose-neutral max-w-none">
+    {{ page.content }}
+  </div>
+</article>
 
 {% schema %}
 {
